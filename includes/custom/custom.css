@@ -1,0 +1,34 @@
+.hidden{
+	display:none !important;
+}
+.brand-link.navbar-light{
+	color:#363636;
+}
+.sidebar-dark-warning .nav-sidebar>.nav-item>.nav-link.active, 
+.sidebar-light-warning .nav-sidebar>.nav-item>.nav-link.active,
+.nav-treeview>.nav-item>.nav-link.active, 
+.nav-treeview>.nav-item>.nav-link.active:focus,
+.nav-treeview>.nav-item>.nav-link.active:hover{
+	color:#ba3644 !important;
+}
+
+.msg-popup{
+	position:fixed;
+	top:0;
+	z-index:1050;
+}
+@media (max-width: 767px){
+	.msg-popup{
+		width:100%;
+	}	
+}
+@media (min-width: 768px) {
+	.msg-popup{
+		left:35%;
+	}	
+}
+@media (min-width: 1200px) {
+	.msg-popup{
+		left:40%;
+	}	
+}
