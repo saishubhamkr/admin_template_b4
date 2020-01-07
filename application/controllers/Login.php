@@ -72,25 +72,64 @@ class Login extends CI_Controller {
 	public function validateUser(){
 		if($this->input->post('forgotpassword')!==NULL){
 			$username=$this->input->post('username');
-			$result=$this->Account_model->sendotp($username);
+			$result=$this->Account_model->createotp($username);
 			if($result['status']===true){
 				$otp=$result['otp'];
 				$verification_msg="$otp is your One Time Password to Reset password . This OTP is valid for 15 minutes.";
 				$smsdata=array("mobile"=>$result['mobile'],"message"=>$verification_msg);
-				send_sms($smsdata);
+				
+				//send_sms($smsdata);
+				
 				$this->session->set_userdata("username",$username);
-				redirect('admin/login/enterotp/'.$otp);
+				redirect('enterotp/'.$otp);
 			}
 			else{
 				$this->session->set_flashdata("logerr","Username not valid!");
-				redirect('admin/login/forgotpassword/');
+				redirect('forgotpassword/');
 			}
 		}
 		else{
-			redirect('admin/login/');
+			redirect('login/');
 		}
 	}
 	
+	public function validateOTP(){
+		if($this->session->username===NULL){redirect('login/');}
+		if($this->input->post('submitotp')!==NULL){
+			$data['otp']=$this->input->post('otp');
+			$data['username']=$this->session->username;
+			$result=$this->Account_model->verifyotp($data);
+			if($result['verify']===true){
+				redirect('resetpassword/');
+			}
+			else{
+				$this->session->set_flashdata("logerr",$result['verify']);
+				redirect('enterotp/');
+			}
+		}
+		redirect('login/');
+	}
+	
+	public function skipreset(){
+		if($this->session->username!==NULL){
+			$username=$this->session->username;
+			$this->session->unset_userdata("username");
+			$result=$this->Account_model->getuser(array("username"=>$username));
+			$this->startsession($result);
+			redirect('/');
+		}
+		redirect("login/");
+	}
+	
+	public function changepassword(){
+		if($this->session->username!==NULL){
+			$password=$this->input->post('password');
+			$username=$this->session->userdata("username");
+			$where['username']=$username;
+			$result=$this->Account_model->changepassword($password,$where);
+		}
+		redirect('login/');
+	}
 	public function createadmin(){
 		$data['title']="Create Admin";
 		$data['body_class']="login-page";
