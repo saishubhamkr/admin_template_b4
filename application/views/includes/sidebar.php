@@ -1,5 +1,5 @@
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-dark-primary elevation-4 sidebar-no-expand <?php echo SIDEBAR_COLOR; ?>">
+<aside class="main-sidebar elevation-4 sidebar-no-expand <?php echo SIDEBAR_COLOR; ?>">
     <!-- Brand Logo -->
     <a href="<?php echo base_url(); ?>" class="brand-link <?php echo BRAND_COLOR; ?>">
         <img src="<?php echo file_url("assets/images/icon.png"); ?>" alt="Foodoo Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
