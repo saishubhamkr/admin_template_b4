@@ -19,8 +19,8 @@
 			}
 		}  
 	}
-	if(!function_exists('checkadminlogin')) {
-  		function checkadminlogin() {
+	if(!function_exists('checklogin')) {
+  		function checklogin() {
     		$CI = get_instance();
 			if($CI->session->user===NULL || $CI->session->role!='admin'){
 				setredirecturl();
