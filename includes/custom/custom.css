@@ -17,6 +17,9 @@
 	top:0;
 	z-index:1050;
 }
+.toast{
+	min-width:320px;
+}
 @media (max-width: 767px){
 	.msg-popup{
 		width:100%;

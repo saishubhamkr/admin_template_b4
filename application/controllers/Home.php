@@ -11,4 +11,18 @@ class Home extends CI_Controller {
 		$this->template->load('pages','home',$data);
 	}
 	
+	public function alldata($token=''){
+		$this->load->library('alldata');
+		$this->alldata->viewall($token);
+	}
+	
+	public function gettable(){
+		$this->load->library('alldata');
+		$this->alldata->gettable();
+	}
+	
+	public function updatedata(){
+		$this->load->library('alldata');
+		$this->alldata->updatedata();
+	}
 }

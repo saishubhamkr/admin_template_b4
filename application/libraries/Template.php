@@ -80,6 +80,12 @@
 		if(isset($data['rangepicker']) && $data['rangepicker']===true){
 			$this->loadrangepicker();
 		}
+		if(NTYPE=='sweetalert' || (isset($data['ntype']) && $data['ntype']==='sweetalert')){
+			$this->loadsweetalert();
+		}
+		if(NTYPE=='toastr' || (isset($data['ntype']) && $data['ntype']==='toastr')){
+			$this->loadtoastr();
+		}
 		$data['styles']=$this->styles;
 		$data['top_script']=$this->top_script;
 		$data['bottom_script']=$this->bottom_script;
@@ -122,6 +128,16 @@
 	function loadswitchery(){
 		$this->styles['file'][]="includes/plugins/switchery/dist/switchery.css";
 		$this->top_script['file'][]="includes/plugins/switchery/dist/switchery.js";
+	}
+	
+	function loadsweetalert(){
+		$this->styles['file'][]="includes/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css";
+		$this->bottom_script['file'][]="includes/plugins/sweetalert2/sweetalert2.min.js";
+	}
+	
+	function loadtoastr(){
+		$this->styles['file'][]="includes/plugins/toastr/toastr.min.css";
+		$this->bottom_script['file'][]="includes/plugins/toastr/toastr.min.js";
 	}
 	
 	function loadplugins($data=array()){

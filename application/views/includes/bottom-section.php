@@ -29,6 +29,34 @@
         <script src="<?php echo file_url("includes/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"); ?>"></script>
         <!-- AdminLTE App -->
         <script src="<?php echo file_url("includes/dist/js/adminlte.js"); ?>"></script>
+        
+        <?php
+		if(!empty($bottom_script)){
+		  foreach($bottom_script as $key=>$script){
+			  if($key=="link"){
+					if(is_array($script)){
+						foreach($script as $single_script){
+							echo "<script src='$single_script'></script>\n\t\t";
+						}
+					}
+					else{
+						echo "<script src='$script'></script>\n\t\t";
+					}
+			  }
+			  elseif($key=="file"){
+				if(is_array($script)){
+					foreach($script as $single_script){
+						echo "<script src='".file_url("$single_script")."'></script>\n\t\t";
+					}
+				}
+				else{
+					echo "<script src='".file_url("$script")."'></script>\n\t\t";
+				}
+			  }
+		  }
+		}
+		?>
+        
         <!-- AdminLTE for demo purposes -->
         <script src="<?php echo file_url("includes/dist/js/demo.js"); ?>"></script>
         <script src="<?php echo file_url("includes/custom/custom.js"); ?>"></script>
