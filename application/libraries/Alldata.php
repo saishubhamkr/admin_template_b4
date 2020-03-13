@@ -84,8 +84,11 @@ class Alldata {
 											?>
 										</div>
 									</div>
-									<div class=\"col-md-4\"><br>
-										<button type=\"button\" class=\"btn btn-bg-info btn-sm\" onClick=\"$('#table').trigger('change');\">Refresh</button>
+									<div class=\"col-md-4\"><br><br>
+										<button type=\"button\" class=\"btn btn-info btn-sm\" onClick=\"$('#table').trigger('change');\">Refresh</button>
+										<button type=\"button\" class=\"btn btn-primary btn-sm\" onClick=\"$('#bootstrap-data-table-export tfoot').toggleClass('hidden');$(this).toggleClass('btn-primary btn-danger');\">
+											Toggle Search
+										</button>
 									</div>
 								</div><br>
 				
@@ -169,7 +172,22 @@ class Alldata {
             });
 			
 			function createTable(){
-				$('#bootstrap-data-table-export').DataTable();
+				$('#bootstrap-data-table-export tfoot th').each( function () {
+					var title = $(this).text();
+					$(this).html( '<input type=\"text\" placeholder=\"Search '+title+'\" />' );
+				} );
+				var table = $('#bootstrap-data-table-export').DataTable();
+				table.columns().every( function () {
+					var that = this;
+			 
+					$( 'input', this.footer() ).on( 'keyup change clear', function () {
+						if ( that.search() !== this.value ) {
+							that
+								.search( this.value )
+								.draw();
+						}
+					} );
+				} );
 			}
         </script>";
 		return $html;
@@ -211,7 +229,17 @@ class Alldata {
         } 
         ?> 
     </tbody>
-
+    <tfoot class=\"hidden\">
+        <tr>
+        	<?php
+            	if(!empty(\$columns)){
+					foreach(\$columns as \$column){
+						echo \"<th>\$column[Field]</th>\";
+					}
+				}
+			?>
+        </tr>
+    </tfoot>
 </table>";
 		return $html;
 	}
