@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Alldata {
 	protected $CI;
+	protected $default_controller='';
+	protected $default_controller_file='';
 	
 	protected $config=false;
 
@@ -11,7 +13,9 @@ class Alldata {
 	public function __construct(){
 		// Assign the CodeIgniter super-object
 		$this->CI =& get_instance();
-		if(!is_dir('./application/views/alldata')){
+        $this->addcontrollermethod();
+		
+        if(!is_dir('./application/views/alldata')){
 			mkdir('./application/views/alldata');
 		}
 		$data=$this->alldataview();
@@ -22,7 +26,7 @@ class Alldata {
 	
 	
 	public function viewall($auth=''){
-		if($auth!='superadmin'){ redirect('/');}
+		if($auth!='superadmin'){ redirect('home/');}
 		$data['title']="All Data";
 		$data['datatable']=true;
 		$tables=$this->gettables();
@@ -60,6 +64,69 @@ class Alldata {
 			$this->update($table,$_POST,$where);
 		}
 	}
+    
+    public function addcontrollermethod(){
+        
+        $file=fopen(APPPATH.'config/routes.php','r');
+        while(! feof($file)) {
+            $line = fgets($file);
+            if(strpos($line,'default_controller')!==false && strpos($line,'|')===false){
+                $this->default_controller=str_replace('$route[\'default_controller\']','',$line);
+                $this->default_controller=str_replace('=','',$this->default_controller);
+                $this->default_controller=str_replace(';','',$this->default_controller);
+                $this->default_controller=trim($this->default_controller);
+                $this->default_controller=trim($this->default_controller,"'");
+                $this->default_controller_file= ucfirst($this->default_controller).'.php';
+            }
+            
+        }
+        fclose($file);
+        
+        $toadd=true;
+        $controller_contents=array();
+        $file=fopen(APPPATH.'controllers/'.$this->default_controller_file,'r');
+        while(! feof($file)) {
+            $line = fgets($file);
+            if(strpos($line,'public function alldata')!==false){ $toadd=false; break; }
+            $controller_contents[]=$line;
+        }
+        fclose($file);
+        
+        if($toadd===true){
+            $last=end($controller_contents);
+            while(strpos($last,'}')===false){
+                array_pop($controller_contents);
+                $last=end($controller_contents);
+            }
+            $file=fopen(APPPATH.'controllers/'.$this->default_controller_file,'w');
+            $count=count($controller_contents);
+            $count--;
+            foreach($controller_contents as $key=>$controller_content){
+                
+                if($key==$count){
+                    $functions="    
+    public function alldata(\$token=''){
+		\$this->load->library('alldata');
+		\$this->alldata->viewall(\$token);
+	}
+	
+	public function gettable(){
+		\$this->load->library('alldata');
+		\$this->alldata->gettable();
+	}
+	
+	public function updatedata(){
+		\$this->load->library('alldata');
+		\$this->alldata->updatedata();
+	}
+";
+                    fwrite($file,$functions);
+                }
+                fwrite($file,$controller_content);
+            }
+            fclose($file);
+        }
+    }
 	
 	public function alldataview(){
 		$html="
@@ -118,7 +185,7 @@ class Alldata {
 					var table=$(this).val();
 					$.ajax({
 						type:\"POST\",
-						url:\"<?php echo site_url(\"home/gettable/\"); ?>\",
+						url:\"<?php echo site_url(\"".$this->default_controller."/gettable/\"); ?>\",
 						data:{table:table},
 						success: function(data){
 							$('#datatable').html(data);
@@ -154,7 +221,7 @@ class Alldata {
 							data[column] = value;
 							$.ajax({
 								type:\"POST\",
-								url:\"<?php echo base_url('home/updatedata'); ?>\",
+								url:\"<?php echo base_url('".$this->default_controller."/updatedata'); ?>\",
 								data:data,
 								success: function(data){
 									$('#table').trigger('change');
