@@ -8,6 +8,9 @@
 	}
 	define("SENDER_ID","DEMOOS");
 	define("ROUTE",3);
+        //1 = Transactional Route, 2 = Promotional Route, 3 = Trans DND Route, 7 = Transcrub Route, 8 = OTP Route,
+        //9 = Trans Stock Route, 10 = Trans Property Route, 11 = Trans DND Other Route, 12 = TransCrub Stock, 13 = TransCrub Property,
+        //14 = Trans Crub Route
 	if(!defined('BASEPATH')) exit('No direct script access allowed');
 	//include('getpost-lib.php');
 	if(!function_exists('send_sms')) {
