@@ -10,7 +10,7 @@
                     <div class="card-body">
                     <div class="row">
                         	<div class="col-md-5 col-lg-4">
-                                <?php echo form_open_multipart('admin/savesidebar');?>
+                                <?php echo form_open_multipart('home/savesidebar');?>
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <?php echo form_input(array('type'=>'text','name'=>'activate_menu','id'=>'activate_menu','class'=>'form-control','placeholder'=>'Enter Activate Menu','required'=>'true'));?>

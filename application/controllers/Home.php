@@ -75,9 +75,6 @@ class Home extends CI_Controller {
 		}
 	}
 
-	public function delete_status(){
-		
-	}
 	
 	public function alldata($token=''){
 		$this->load->library('alldata');
