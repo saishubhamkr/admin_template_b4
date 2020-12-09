@@ -51,4 +51,21 @@
 			return str_replace('','',$link);
 		}  
 	}
+	if(!function_exists('validateurl_withrole')){
+		function validateurl_withrole($roles){
+			$CI = get_instance();
+			if(!empty($roles)){
+				$role_array = explode('|',$roles);
+				$current_role = $CI->session->role;
+				if(in_array($current_role,$role_array)){
+					// allow to visit url
+					return true;
+				}else{
+					echo 'Redirect To Logout Page';
+					// return false;
+					// redirect to logout page
+				}
+			}
+		}
+	}
 ?>

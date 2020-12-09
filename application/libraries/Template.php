@@ -11,7 +11,7 @@
 	
     function load($folder, $view, $data=array("title"=>"Page")) {
 		$location=$folder.'/';
-		
+		$data['sidebarmenu'] = $this->ci->Account_model->getdynamic_sidebar();
 		if(!empty($data['styles'])){ 
 			$styles=$data['styles'];
 			foreach($styles as $key=>$style){

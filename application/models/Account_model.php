@@ -111,5 +111,84 @@ class Account_model extends CI_Model{
 		else{ $result=$query->row(); }
 		return $result;
 	}
+
+	public function getsidebar($where=array(),$type='all'){
+       $query = $this->db->get_where('sidebar',$where);
+       if($type == 'all'){
+           $return = $query->result_array();
+       }else{
+           $return = $query->unbuffered_row('array');
+       }
+       return $return;
+    }
+
+    public function savesidebar($postdata){
+        unset($postdata['save_cat']);
+        if(empty($postdata['activate_not'])){
+            $postdata['activate_not'] = '{"0":""}';
+        }
+        if(empty($postdata['position'])){
+            $postdata['position'] = 0;
+        }
+        $insert_status = $this->db->insert('sidebar',$postdata);
+        if($insert_status){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function deletesidebar($id){
+        $update_status = $this->db->update('sidebar',array('status'=>'0'),array('id'=>$id,'status'=>'1'));
+        if($update_status){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function update_sidebar($postdata){
+        unset($postdata['save_cat']);
+        $edit_id = $postdata['edit_id'];
+        unset($postdata['edit_id']);
+        if(empty($postdata['activate_not'])){
+            $postdata['activate_not'] = '{"0":""}';
+        }
+        if(empty($postdata['position'])){
+            $postdata['position'] = 0;
+        }
+        $update_status = $this->db->update('sidebar',$postdata,array('id'=>$edit_id,'status'=>'1'));
+        if($update_status){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function getdynamic_sidebar(){
+        // need to have role
+        $role = $this->session->userdata['role'];        
+		$parentsidebar = $this->getsidebar(array('role_id'=>$role,'status'=>'1','parent'=>'0'),'all');		
+		$returnsidebar = array(); 
+		$returnsidebar = $this->getall_parentwise_sidebar($parentsidebar);
+		//print_r($returnsidebar);die;
+       	return $returnsidebar;
+    }
+
+    public function getall_parentwise_sidebar($allsidebarparentid){
+        $returnarray = array();
+        if(!empty($allsidebarparentid)){
+            foreach($allsidebarparentid as $key=>$oneid){
+                $returnarray[$key] =$this->getsidebar(array('id'=>$oneid['id'],'status'=>'1'),'single');
+                $onesubdata = $this->getsidebar(array('parent'=>$oneid['id'],'status'=>'1'),'all');
+                if(!empty($onesubdata)){
+                    $returnarray[$key]['submenu'] = $onesubdata;
+                }else{
+                    $returnarray[$key]['submenu'] = 0;
+                }
+            }
+        }
+        return $returnarray;
+    }
 	
 }
