@@ -25,7 +25,7 @@ date_default_timezone_set('Asia/Kolkata');
 |
 */
 if(isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST']=='localhost'){
-	$config['base_url'] = "http://$_SERVER[HTTP_HOST]/admin_template_b4";
+	$config['base_url'] = "http://$_SERVER[HTTP_HOST]/templates/admin_template_b4";
 }
 else{
 	$config['base_url'] = "";

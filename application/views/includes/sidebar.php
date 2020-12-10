@@ -19,7 +19,7 @@
         </div>
         
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
+        <?php /*?><nav class="mt-2 hidden">
             <ul class="nav nav-pills nav-sidebar flex-column nav-compact nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="<?php echo base_url(); ?>" class="nav-link <?php echo activate_menu('dashboard'); ?>">
@@ -42,10 +42,10 @@
                     </ul>
                 </li>
             </ul>
-        </nav>
+        </nav><?php */?>
         <!-- /.sidebar-menu -->
         <!-- Sidebar Menu -->
-        <!-- <nav class="mt-2">
+         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column nav-compact nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">                
             <?php 
             if(!empty($sidebarmenu)){
@@ -84,7 +84,7 @@
             }
             ?>
             </ul>
-        </nav> -->
+        </nav> 
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

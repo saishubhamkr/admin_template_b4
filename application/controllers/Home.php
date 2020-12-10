@@ -74,7 +74,20 @@ class Home extends CI_Controller {
 			redirect('home/sidebar/');
 		}
 	}
-
+	
+	public function form(){
+		$data['title']="Form";
+		$this->template->load("pages","form",$data);
+	}
+	
+	public function upload(){
+		$this->load->helper('upload');
+		$result=upload_file("image","./assets/uploads/","jpg|png|jpeg","image");
+		$src=$result['path'];
+		$this->load->helper('tinify');
+		tinifyresizeimage(".".$src,400,400,"cover");
+		print_r($src);
+	}
 	
 	public function alldata($token=''){
 		$this->load->library('alldata');

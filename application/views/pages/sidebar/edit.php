@@ -99,7 +99,7 @@
                                             <a href="<?php echo base_url("home/edit_sidebar/$pside[id]");?>"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
                                             </span></td>
                                         </tr>
-                                        <?php  $child_sidebar = $this->Admin_model->getsidebar(array('status'=>'1','parent'=>$id),'all');
+                                        <?php  $child_sidebar = $this->Account_model->getsidebar(array('status'=>'1','parent'=>$id),'all');
                                         if(!empty($child_sidebar)){
                                             foreach($child_sidebar as $cside){ $cid=$cside['id'];?>
                                         <tr>
@@ -113,7 +113,7 @@
                                             <a href="<?php echo base_url("home/edit_sidebar/$cside[id]");?>"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
                                             </span></td>
                                         </tr>
-                                        <?php $last_sidebar = $this->Admin_model->getsidebar(array('status'=>'1','parent'=>$cid),'all');
+                                        <?php $last_sidebar = $this->Account_model->getsidebar(array('status'=>'1','parent'=>$cid),'all');
                                         if(!empty($last_sidebar)){
                                             foreach($last_sidebar as $lside){ ?>
                                         <tr>
