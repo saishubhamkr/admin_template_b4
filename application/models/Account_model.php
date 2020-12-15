@@ -112,7 +112,11 @@ class Account_model extends CI_Model{
 		return $result;
 	}
 
-	public function getsidebar($where=array(),$type='all'){
+	public function getsidebar($where=array(),$type='all',$like=array()){
+		if(!empty($like)){
+            $this->db->like($like);
+        }
+        $this->db->order_by('position');
        $query = $this->db->get_where('sidebar',$where);
        if($type == 'all'){
            $return = $query->result_array();
@@ -129,6 +133,24 @@ class Account_model extends CI_Model{
         }
         if(empty($postdata['position'])){
             $postdata['position'] = 0;
+        }
+		if(!empty($postdata['icon'])){
+            if(preg_match('/nav-icon/',$postdata['icon']) == 0){
+                $icon_text = str_replace('class="','class="nav-icon ',$postdata['icon']);
+                $postdata['icon'] = $icon_text;
+            }
+        }
+        if(!empty($postdata['role_id'])){
+            $role_array = explode('|',$postdata['role_id']);
+            $role = array();
+            if(!empty($role_array)){                
+                foreach($role_array as $r){
+                    $role[] = "\"$r\"";
+                }                
+            }else{
+                $role[] = "\"1\"";
+            }
+            $postdata['role_id'] = implode(',',$role);
         }
         $insert_status = $this->db->insert('sidebar',$postdata);
         if($insert_status){
@@ -157,6 +179,25 @@ class Account_model extends CI_Model{
         if(empty($postdata['position'])){
             $postdata['position'] = 0;
         }
+		if(!empty($postdata['icon'])){
+            if(preg_match('/nav-icon/',$postdata['icon']) == 0){
+                $icon_text = str_replace('class="','class="nav-icon ',$postdata['icon']);
+                $postdata['icon'] = $icon_text;
+            }
+        }
+        if(!empty($postdata['role_id'])){
+            $role_array = explode('|',$postdata['role_id']);
+            $role = array();
+            if(!empty($role_array)){                
+                foreach($role_array as $r){
+                    $role[] = "\"$r\"";
+                }                
+            }else{
+                $role[] = "\"1\"";
+            }
+            $postdata['role_id'] = implode(',',$role);
+        }
+
         $update_status = $this->db->update('sidebar',$postdata,array('id'=>$edit_id,'status'=>'1'));
         if($update_status){
             return true;
@@ -167,8 +208,8 @@ class Account_model extends CI_Model{
 
     public function getdynamic_sidebar(){
         // need to have role
-        $role = $this->session->userdata['role'];        
-		$parentsidebar = $this->getsidebar(array('role_id'=>$role,'status'=>'1','parent'=>'0'),'all');		
+        $role = $this->session->role;        
+		$parentsidebar = $this->getsidebar(array('role_id'=>$role,'status'=>'1','parent'=>'0'),'all',array('role_id'=>"\"$role\""));		
 		$returnsidebar = array(); 
 		$returnsidebar = $this->getall_parentwise_sidebar($parentsidebar);
 		//print_r($returnsidebar);die;
@@ -177,10 +218,11 @@ class Account_model extends CI_Model{
 
     public function getall_parentwise_sidebar($allsidebarparentid){
         $returnarray = array();
+		$role = $this->session->role;
         if(!empty($allsidebarparentid)){
             foreach($allsidebarparentid as $key=>$oneid){
-                $returnarray[$key] =$this->getsidebar(array('id'=>$oneid['id'],'status'=>'1'),'single');
-                $onesubdata = $this->getsidebar(array('parent'=>$oneid['id'],'status'=>'1'),'all');
+                $returnarray[$key] =$this->getsidebar(array('id'=>$oneid['id'],'status'=>'1'),'single',array('role_id'=>"\"$role\""));
+                $onesubdata = $this->getsidebar(array('parent'=>$oneid['id'],'status'=>'1'),'all',array('role_id'=>"\"$role\""));
                 if(!empty($onesubdata)){
                     $returnarray[$key]['submenu'] = $onesubdata;
                 }else{

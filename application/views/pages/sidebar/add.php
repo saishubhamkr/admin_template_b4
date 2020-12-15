@@ -55,7 +55,7 @@
                                 </div>                                
                                 <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <?php echo form_input(array('type'=>'text','name'=>'role_id','id'=>'roles','class'=>'form-control','placeholder'=>'Enter Allowed Roles','required'=>'true'));?>
+                                        <?php echo form_input(array('type'=>'text','name'=>'role_id','id'=>'roles','class'=>'form-control','placeholder'=>'Enter Allowed Roles (as 1|2|3 if multiple)','required'=>'true'));?>
                                     </div>                                    
                                 </div>
                                 <div class="form-group row">
@@ -96,6 +96,7 @@
                                             <td><span class="float-right">
                                             <a href='<?php echo base_url("home/delete_sidebar/$pside[id]");?>'><button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button></a>
                                             <a href="<?php echo base_url("home/edit_sidebar/$pside[id]");?>"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
+                                            <button class="btn btn-info btn-xs duplicate" type="button" data-dupid="<?php echo $pside['id'];?>"><i class="fa fa-network-wired"></i></button>
                                             </span></td>
                                         </tr>
                                         <?php  $child_sidebar = $this->Account_model->getsidebar(array('status'=>'1','parent'=>$id),'all');
@@ -110,6 +111,7 @@
                                             <td width='20%'><span class="float-right">
                                             <a href="<?php echo base_url("home/delete_sidebar/$cside[id]");?>"><button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button></a>
                                             <a href="<?php echo base_url("home/edit_sidebar/$cside[id]");?>"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
+                                            <button class="btn btn-info btn-xs duplicate" type="button" data-dupid="<?php echo $cside['id'];?>"><i class="fa fa-network-wired"></i></button>
                                             </span></td>
                                         </tr>
                                         <?php $last_sidebar = $this->Account_model->getsidebar(array('status'=>'1','parent'=>$cid),'all');
@@ -122,6 +124,7 @@
                                             <td width='20%'><span class="float-right">
                                             <a href="<?php echo base_url("home/delete_sidebar/$lside[id]");?>"><button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button></a>
                                             <a href="<?php echo base_url("home/edit_sidebar/$lside[id]");?>"><button class="btn btn-success btn-xs"><i class="fa fa-edit"></i></button></a>
+                                            <button class="btn btn-info btn-xs duplicate" type="button" data-dupid="<?php echo $lside['id'];?>"><i class="fa fa-network-wired"></i></button>
                                             </span></td>
                                         </tr>
                                         <?php }
@@ -154,6 +157,29 @@
         });
 
         
+
+        $('.duplicate').click(function(){
+            var dupid = $(this).data('dupid');
+            $.ajax({
+                url:"<?php echo base_url('home/ajax_sidebar') ;?>",
+                method:"POST",
+                data:{dupid:dupid},
+                success:function(data){
+                    //console.log(data);
+                    var setdata = JSON.parse(data);
+                    //console.log(setdata);
+                    $('#activate_menu').val(setdata.activate_menu);
+                    $('#activate_not').val(setdata.activate_not);
+                    $('#base_url').val(setdata.base_url);
+                    $('#icon').val(setdata.icon);
+                    $('#parent_id').val(setdata.parent);
+                    $('#position').val(setdata.position);
+                    var role_text = setdata.role_id;                    
+                    $('#roles').val(role_text);
+                    $('#status').val(setdata.status);
+                }
+            });
+        });
         
 		var table=$('.data-table').DataTable({
 			scrollCollapse: true,

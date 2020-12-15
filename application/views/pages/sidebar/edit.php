@@ -55,7 +55,8 @@
                                 </div>                                
                                 <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <?php echo form_input(array('type'=>'text','name'=>'role_id','id'=>'roles','class'=>'form-control','value'=>$one_sidebar['role_id'],'placeholder'=>'Enter Allowed Roles','required'=>'true'));?>
+                                        <?php $role_text = $one_sidebar['role_id']; $role = str_replace(",",'|',str_replace("\"","",$role_text));?>
+                                        <?php echo form_input(array('type'=>'text','name'=>'role_id','id'=>'roles','class'=>'form-control','value'=>$role,'placeholder'=>'Enter Allowed Roles (as 1|2|3)','required'=>'true'));?>
                                     </div>                                    
                                 </div>
                                 <div class="form-group row">
@@ -152,9 +153,7 @@
 
         $('.hoverable').mouseleave(function(){
             $(this).popover('hide');
-        });
-
-        
+        });        
         
 		var table=$('.data-table').DataTable({
 			scrollCollapse: true,

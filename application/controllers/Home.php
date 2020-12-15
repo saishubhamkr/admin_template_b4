@@ -74,6 +74,19 @@ class Home extends CI_Controller {
 			redirect('home/sidebar/');
 		}
 	}
+
+	public function ajax_sidebar(){
+		$dupid = $this->input->post('dupid');
+		$sidebardata = $this->Account_model->getsidebar(array('status'=>'1','id'=>$dupid),'single');
+		if(!empty($sidebardata)){
+			if(!empty($sidebardata['role_id'])){
+				$sidebardata['role_id'] = str_replace(',','|',str_replace("\"",'',$sidebardata['role_id']));
+			}
+			echo json_encode($sidebardata);
+		}else{
+			echo false;
+		}
+	}
 	
 	public function form(){
 		$data['title']="Form";

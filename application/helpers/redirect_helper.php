@@ -61,7 +61,7 @@
 					// allow to visit url
 					return true;
 				}else{
-					echo 'Redirect To Logout Page';
+					redirect('/logout');
 					// return false;
 					// redirect to logout page
 				}
