@@ -37,7 +37,7 @@ CREATE TABLE `tmp_sidebar` (
   `name` varchar(255) NOT NULL,
   `parent` int(11) NOT NULL,
   `position` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
+  `role_id` varchar(255) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
