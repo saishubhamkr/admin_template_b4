@@ -209,7 +209,7 @@ class Account_model extends CI_Model{
     public function getdynamic_sidebar(){
         // need to have role
         $role = $this->session->role;        
-		$parentsidebar = $this->getsidebar(array('role_id'=>$role,'status'=>'1','parent'=>'0'),'all',array('role_id'=>"\"$role\""));		
+		$parentsidebar = $this->getsidebar(array('status'=>'1','parent'=>'0'),'all',array('role_id'=>"\"$role\""));		
 		$returnsidebar = array(); 
 		$returnsidebar = $this->getall_parentwise_sidebar($parentsidebar);
 		//print_r($returnsidebar);die;
