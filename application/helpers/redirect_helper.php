@@ -22,7 +22,7 @@
 	if(!function_exists('checklogin')) {
   		function checklogin() {
     		$CI = get_instance();
-			if($CI->session->user===NULL){
+			if($CI->session->user===NULL || $CI->session->project!=PROJECT_NAME ){
 				setredirecturl();
 				redirect('login/');
 			}
@@ -34,7 +34,7 @@
 	if(!function_exists('loginredirect')) {
   		function loginredirect($url='/') {
     		$CI = get_instance();
-			if($CI->session->user!==NULL){
+			if($CI->session->user!==NULL && $CI->session->project==PROJECT_NAME){
 				if($CI->session->redirecturl!=NULL) {
 					$redirecturl=$CI->session->redirecturl;
 					$CI->session->unset_userdata('redirecturl');

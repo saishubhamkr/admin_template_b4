@@ -41,7 +41,7 @@ class Login extends CI_Controller {
 	
 	public function logout(){
 		if($this->session->user!==NULL){
-			$data=array("user","name","role");
+			$data=array("user","name","role","project");
 			$this->session->unset_userdata($data);
 		}	
 		redirect('login/');
@@ -66,6 +66,7 @@ class Login extends CI_Controller {
 		$data['user']=md5($result['id']);
 		$data['name']=$result['name'];
 		$data['role']=$result['role'];
+		$data['project']=PROJECT_NAME;
 		$this->session->set_userdata($data);
 	}
 	
