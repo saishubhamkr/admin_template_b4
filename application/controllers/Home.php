@@ -88,6 +88,11 @@ class Home extends CI_Controller {
 		}
 	}
 	
+	public function getOrderList(){
+		$parent_id=$this->input->post('parent_id');
+		$array=$this->Account_model->getOrderList($parent_id);
+		echo json_encode($array);
+	}
 	public function form(){
 		$data['title']="Form";
 		$this->template->load("pages","form",$data);

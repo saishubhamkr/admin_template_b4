@@ -48,11 +48,18 @@
                                         ?>
                                     </div>                                    
                                 </div>
+                                <?php /*?><div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <?php echo form_input(array('type'=>'number','min'=>'0','name'=>'position','id'=>'position','class'=>'form-control','placeholder'=>'Position'));?>
+                                    </div>                                    
+                                </div>  <?php */?>   
                                 <div class="form-group row">
                                     <div class="col-sm-12">
-                                        <?php echo form_input(array('type'=>'number','min'=>'0','name'=>'position','id'=>'position','class'=>'form-control','value'=>$one_sidebar['position'],'placeholder'=>'Position'));?>
-                                    </div>                                    
-                                </div>                                
+                                        <?php 
+                                            echo create_form_input("select","position","",true,'',array('id'=>'position','data-position'=>$one_sidebar['position']),array(""=>"Select Position"));
+                                        ?>
+                                    </div>
+                                </div> 
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <?php $role_text = $one_sidebar['role_id']; $role = str_replace(",",'|',str_replace("\"","",$role_text));?>
@@ -168,6 +175,45 @@
 				"info": "_START_-_END_ of _TOTAL_ entries",
 				searchPlaceholder: "Search"
 			},
-		});					
+		});	
+        
+		$('body').on('change','#parent_id',function(){
+			var parent_id=$(this).val();
+			var option="<select name='position' id='position' class='form-control' required>";
+			option+="<option value=''>Select </option>";
+			option+="<option value='0'>Top</option>";
+            var position=$('#position').data('position');
+            position--;
+			$.ajax({
+				type:"POST",
+				url:"<?php echo base_url("home/getOrderList"); ?>",
+				data:{parent_id:parent_id},
+				dataType:"json",
+				beforeSend: function(){
+					//$(".box-overlay").show();
+				},
+				success: function(data){
+					$(data).each(function(i, val) {
+                        if(val['name']!=$('#name').val()){
+						  option+="<option value='"+val['position']+"'>After "+val['name']+"</option>";
+                        }
+					});
+					option+='</select>';
+					$('#position').replaceWith(option);
+                    if(position!==''){
+                        $('#position').val(position);
+                        if($('#position').val()===null){
+                            while($('#position').val()===null){
+                                position--;
+                                $('#position').val(position);
+                            }
+                        }
+                        $('#position').removeAttr('data-position');
+                    }
+					$('.box-overlay').hide();
+				}
+			});
+		});
+        $('#parent_id').trigger('change');
     });
 </script>

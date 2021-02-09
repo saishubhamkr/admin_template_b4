@@ -48,11 +48,18 @@
                                         ?>
                                     </div>                                    
                                 </div>
-                                <div class="form-group row">
+                                <?php /*?><div class="form-group row">
                                     <div class="col-sm-12">
                                         <?php echo form_input(array('type'=>'number','min'=>'0','name'=>'position','id'=>'position','class'=>'form-control','placeholder'=>'Position'));?>
                                     </div>                                    
-                                </div>                                
+                                </div>  <?php */?>   
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <?php 
+                                            echo create_form_input("select","position","",true,'',array('id'=>'position'),array(""=>"Select Position"));
+                                        ?>
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                         <?php echo form_input(array('type'=>'text','name'=>'role_id','id'=>'roles','class'=>'form-control','placeholder'=>'Enter Allowed Roles (as 1|2|3 if multiple)','required'=>'true'));?>
@@ -194,6 +201,31 @@
 				"info": "_START_-_END_ of _TOTAL_ entries",
 				searchPlaceholder: "Search"
 			},
-		});					
+		});		
+        
+		$('body').on('change','#parent_id',function(){
+			var parent_id=$(this).val();
+			var option="<select name='position' id='position' class='form-control' required>";
+			option+="<option value=''>Select </option>";
+			option+="<option value='0'>Top</option>";
+			$.ajax({
+				type:"POST",
+				url:"<?php echo base_url("home/getOrderList"); ?>",
+				data:{parent_id:parent_id},
+				dataType:"json",
+				beforeSend: function(){
+					//$(".box-overlay").show();
+				},
+				success: function(data){
+					$(data).each(function(i, val) {
+						option+="<option value='"+val['position']+"'>After "+val['name']+"</option>";
+					});
+					option+='</select>';
+					$('#position').replaceWith(option);
+					$('.box-overlay').hide();
+				}
+			});
+		});
+        $('#parent_id').trigger('change');
     });
 </script>

@@ -152,9 +152,35 @@ class Account_model extends CI_Model{
             }
             $postdata['role_id'] = implode(',',$role);
         }
+        if($postdata['parent']!=0){
+			if($position==0){
+				$this->db->where("id",$postdata['parent']);
+				$query = $this->db->get("sidebar");
+				$array=$query->unbuffered_row('array');
+				$postdata['position']=$position=$array['position'];
+			}
+			if($postdata['status']==1){
+				$query="UPDATE ".TP."sidebar set `status`='1' where `id`='$postdata[parent]'";
+				$this->db->query($query);
+			}
+		}
+		else{
+			$this->db->select_max('position');
+			$this->db->where("parent=(select id from ".TP."sidebar where `position`='$postdata[position]')");
+			$query = $this->db->get("sidebar");
+			$array=$query->row_array();
+			if($array['position']!=0){
+				$postdata['position']=$position=$array['position'];
+			}
+		}
+		//print_r($postdata);
+		$query="UPDATE ".TP."sidebar set `position`=`position`+1 where `position`>'$position'";
+		$this->db->query($query);
+		$postdata['position']++;
+        
         $insert_status = $this->db->insert('sidebar',$postdata);
         if($insert_status){
-            return true;
+            return $postdata['position'];
         }else{
             return false;
         }
@@ -197,13 +223,58 @@ class Account_model extends CI_Model{
             }
             $postdata['role_id'] = implode(',',$role);
         }
-
-        $update_status = $this->db->update('sidebar',$postdata,array('id'=>$edit_id,'status'=>'1'));
-        if($update_status){
-            return true;
-        }else{
-            return false;
-        }
+        
+		$where="id='$edit_id' or parent='$edit_id'";
+		$this->db->order_by('position');
+		$getquery=$this->db->get_where("sidebar",$where);
+		$array=$getquery->result_array();
+        //Array ( [0] => Array ( [id] => 16 [activate_menu] => home [activate_not] => {"0":""} [base_url] => payment/report/ [icon] => [name] => adsfa [parent] => 12 [position] => 4 [role_id] => "member" [status] => 1 ) )
+        if(is_array($array)){
+			foreach($array as $key=>$row){
+				$i=0;
+				if($row['parent']==0){
+					if($postdata['position']>$row['position']){ $postdata['position']-=count($array); }
+					$array[$key]['activate_menu']=$postdata['activate_menu'];
+					$array[$key]['activate_not']=$postdata['activate_not'];
+					$array[$key]['base_url']=$postdata['base_url'];
+					$array[$key]['icon']=$postdata['icon'];
+					$array[$key]['name']=	$postdata['name'];
+					$array[$key]['parent']=$postdata['parent'];
+					$array[$key]['position']=$postdata['position'];
+					$array[$key]['role_id']=$postdata['role_id'];
+					$array[$key]['status']=$postdata['status'];
+				}
+				else{
+					if($key>0){
+						$array[$key]['position']=	$i++;
+						$array[$key]['status']=$postdata['status'];
+					}
+					else{
+						if($postdata['position']>$row['position']){ $postdata['position']-=count($array); }
+						$array[$key]['activate_menu']=$postdata['activate_menu'];
+						$array[$key]['activate_not']=$postdata['activate_not'];
+						$array[$key]['base_url']=$postdata['base_url'];
+						$array[$key]['icon']=$postdata['icon'];
+						$array[$key]['name']=	$postdata['name'];
+						$array[$key]['parent']=$postdata['parent'];
+                        $array[$key]['position']=$postdata['position'];
+                        $array[$key]['role_id']=$postdata['role_id'];
+                        $array[$key]['status']=$postdata['status'];
+					}
+				}
+			}
+		}
+        $this->db->delete("sidebar",$where);
+		$this->reordermenu();
+		$neworder=$array[0]['position'];
+		if(is_array($array)){
+			foreach($array as $key=>$data){
+				if($key>1){
+					$data['position']=++$neworder;
+				}
+				$neworder=$this->savesidebar($data);
+			}
+		}
     }
 
     public function getdynamic_sidebar(){
@@ -233,4 +304,25 @@ class Account_model extends CI_Model{
         return $returnarray;
     }
 	
+	public function getOrderList($parent_id=0){
+		$this->db->where("parent",$parent_id);
+		$this->db->order_by('position');
+		$query = $this->db->get("sidebar");
+		$data=$query->result_array();
+		return $data;
+	}
+	
+	public function reordermenu(){
+		$this->db->order_by('position');
+		$getquery=$this->db->get_where("sidebar");
+		$array=$getquery->result_array();
+		if(is_array($array)){
+			$i=0;
+			foreach($array as $key=>$row){
+				$i++;
+				$update=array("position"=>$i);
+				$this->db->update("sidebar",$update,array("id"=>$row['id']));
+			}
+		}
+	}
 }
