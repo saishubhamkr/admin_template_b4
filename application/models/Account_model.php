@@ -152,6 +152,7 @@ class Account_model extends CI_Model{
             }
             $postdata['role_id'] = implode(',',$role);
         }
+        $position=$postdata['position'];
         if($postdata['parent']!=0){
 			if($position==0){
 				$this->db->where("id",$postdata['parent']);
@@ -174,7 +175,7 @@ class Account_model extends CI_Model{
 			}
 		}
 		//print_r($postdata);
-		$query="UPDATE ".TP."sidebar set `position`=`position`+1 where `position`>'$position'";
+		$query="UPDATE ".TP."sidebar set `position`=`$position`+1 where `position`>'$position'";
 		$this->db->query($query);
 		$postdata['position']++;
         
