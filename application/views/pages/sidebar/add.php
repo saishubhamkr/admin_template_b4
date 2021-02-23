@@ -179,7 +179,7 @@
                     $('#activate_not').val(setdata.activate_not);
                     $('#base_url').val(setdata.base_url);
                     $('#icon').val(setdata.icon);
-                    $('#parent_id').val(setdata.parent);
+                    $('#parent_id').val(setdata.parent).trigger('change');
                     $('#position').val(setdata.position);
                     var role_text = setdata.role_id;                    
                     $('#roles').val(role_text);

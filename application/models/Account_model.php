@@ -174,8 +174,7 @@ class Account_model extends CI_Model{
 				$postdata['position']=$position=$array['position'];
 			}
 		}
-		//print_r($postdata);
-		$query="UPDATE ".TP."sidebar set `position`=`$position`+1 where `position`>'$position'";
+        $query="UPDATE ".TP."sidebar set `position`=`position`+1 where `position`>'$position'";
 		$this->db->query($query);
 		$postdata['position']++;
         
