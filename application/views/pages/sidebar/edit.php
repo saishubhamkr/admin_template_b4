@@ -200,7 +200,7 @@
 					});
 					option+='</select>';
 					$('#position').replaceWith(option);
-                    if(position!==''){
+                    if(position!=='' && data!=''){
                         $('#position').val(position);
                         if($('#position').val()===null){
                             while($('#position').val()===null){
