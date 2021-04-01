@@ -30,6 +30,8 @@ class Paging {
 	
 	protected $link_class=array();
 	
+	protected $anchor_class=array();
+	
 	protected $config=false;
 
 	// We'll use a constructor, as you can't directly call a function
@@ -145,15 +147,16 @@ class Paging {
 		else{
 			$pagelink="";
 		}
-		$pagelink.="<li class='".implode(" ",$class)."'>";
+		$pagelink.="<li class='".implode(" ",$class)." ";
+		if($current===true){$pagelink.="active";}
+		$pagelink.="'>";
 		if($page!=""){
 			$href=$this->url."page/".$page."/".$this->pagefilters;
 		}
 		else{
 			$href="#";
 		}
-		$pagelink.="<a href='$href' class=' ";
-		if($current===true){$pagelink.="active";}
+		$pagelink.="<a href='$href' class=' ".implode(" ",$this->anchor_class)." ";
 		$pagelink.="'>".$link."</a></li>";
 		
 		if($this->display_type=="individual"){

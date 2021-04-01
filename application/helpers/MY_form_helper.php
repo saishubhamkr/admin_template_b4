@@ -36,11 +36,14 @@
 	
 	if(!function_exists('get_label')) {
   		function get_label($name,$label,$required){
-			$form_label='<label for="'.$name.'">'.$label;
-			if($required===true){
-				$form_label.=' <span class="text-danger">*</span>';
+			$form_label='';
+			if($label!=''){
+				$form_label='<label for="'.$name.'">'.$label;
+				if($required===true){
+					$form_label.=' <span class="text-danger">*</span>';
+				}
+				$form_label.='</label>';
 			}
-			$form_label.='</label>';
 			return $form_label;
 			
 		}

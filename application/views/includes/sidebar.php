@@ -19,7 +19,7 @@
         </div>
         
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
+        <?php /*?><nav class="mt-2 hidden">
             <ul class="nav nav-pills nav-sidebar flex-column nav-compact nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="<?php echo base_url(); ?>" class="nav-link <?php echo activate_menu('dashboard'); ?>">
@@ -42,7 +42,49 @@
                     </ul>
                 </li>
             </ul>
-        </nav>
+        </nav><?php */?>
+        <!-- /.sidebar-menu -->
+        <!-- Sidebar Menu -->
+         <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-compact nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">                
+            <?php 
+            if(!empty($sidebarmenu)){
+                foreach($sidebarmenu as $sidebarlist){
+                //echo $sidebarlist['id'];
+                if(empty($sidebarlist['submenu'])){?>
+            <li class="nav-item">
+                <a class="<?php echo activate_menu($sidebarlist['activate_menu']); ?> nav-link" href="<?php echo base_url($sidebarlist['base_url']); ?>">
+                    <?php echo $sidebarlist['icon'];?>
+                    <p><?php echo $sidebarlist['name'];?></p>
+                </a>
+            </li>
+            <?php }else{ $not = json_decode($sidebarlist['activate_not'],true);?>
+            <li class="nav-item has-treeview <?php echo activate_dropdown($sidebarlist['activate_menu'],'li',$not); ?>">
+                <a class="nav-link <?php echo activate_dropdown($sidebarlist['activate_menu'],'a',$not); ?>" href="#" data-toggle="treeview">
+                    <?php echo $sidebarlist['icon'];?>
+                    <p><?php echo $sidebarlist['name'];?> <i class="right fas fa-angle-left"></i></p>
+                </a>
+                <ul class="nav nav-treeview">
+            <?php foreach($sidebarlist['submenu'] as $submenu){?>    
+                
+                    <li class='nav-item'>
+                        <a class="nav-link <?php echo activate_menu($submenu['activate_menu']); ?>" href="<?php echo base_url($submenu['base_url']); ?>">
+            <?php if(!empty($submenu['icon'])){ echo "$submenu[icon]"; }else{?><i class="nav-icon fa fa-plus"></i><?php } ?> 
+                            <p><?php echo $submenu['name'];?></p>
+                        </a>
+                    </li>
+                
+            <?php } ?>       
+                </ul>
+            </li>
+            <?php       }
+                }
+            }else{
+
+            }
+            ?>
+            </ul>
+        </nav> 
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

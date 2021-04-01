@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 07, 2020 at 01:07 PM
+-- Generation Time: Dec 09, 2020 at 07:10 AM
 -- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.4
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_admintemplate`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tmp_sidebar`
+--
+
+CREATE TABLE `tmp_sidebar` (
+  `id` int(11) NOT NULL,
+  `activate_menu` varchar(255) NOT NULL,
+  `activate_not` varchar(255) NOT NULL,
+  `base_url` varchar(255) NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `parent` int(11) NOT NULL,
+  `position` int(11) NOT NULL,
+  `role_id` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -57,6 +77,12 @@ INSERT INTO `tmp_users` (`id`, `username`, `mobile`, `name`, `email`, `password`
 --
 
 --
+-- Indexes for table `tmp_sidebar`
+--
+ALTER TABLE `tmp_sidebar`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tmp_users`
 --
 ALTER TABLE `tmp_users`
@@ -66,6 +92,12 @@ ALTER TABLE `tmp_users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `tmp_sidebar`
+--
+ALTER TABLE `tmp_sidebar`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tmp_users`
